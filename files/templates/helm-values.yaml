@@ -15,9 +15,10 @@ provisioner:
 # Variables for 'internal' use please use with caution! #
 #########################################################
 
-## The directory where the provisioner and pluginSocketFile will be mounted
-socketDir: /var/snap/microk8s/common/var/lib/kubelet/plugins/cephfs.csi.ceph.com
-## The directory where nodeplugin socket is created
-registrationDir: /var/snap/microk8s/common/var/lib/kubelet/plugins_registry
-## The nodeplugin plugins directory
-pluginDir: /var/snap/microk8s/common/var/lib/kubelet/plugins
+# This doesn't cover all of the microk8s paths so an overlay is used for now instead
+### The directory where the provisioner and pluginSocketFile will be mounted
+#socketDir: /var/snap/microk8s/common/var/lib/kubelet/plugins/cephfs.csi.ceph.com
+### The directory where nodeplugin socket is created
+#registrationDir: /var/snap/microk8s/common/var/lib/kubelet/plugins_registry
+### The nodeplugin plugins directory
+#pluginDir: /var/snap/microk8s/common/var/lib/kubelet/plugins
