@@ -1,0 +1,46 @@
+#@ load("@ytt:data", "data")
+
+#@ if hasattr(data.values.ceph_csi_cephfs, "storage_classes"):
+#@ for sc in data.values.ceph_csi_cephfs.storage_classes:
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+   name: #@ sc.name
+   annotations: 
+     #@ if/end hasattr(sc, "default"):
+     storageclass.kubernetes.io/is-default-class: "true"
+provisioner: cephfs.csi.ceph.com
+parameters:
+   clusterID: #@ data.values.ceph_csi_cephfs.cluster_id
+   
+   # CephFS filesystem name into which the volume shall be created
+   fsName: #@ sc.fsname
+
+   # (optional) Ceph pool into which volume data shall be stored
+   #@ if/end hasattr(sc, "pool"):
+   pool: #@ sc.pool
+
+   # The secrets have to contain user and/or Ceph admin credentials.
+   csi.storage.k8s.io/provisioner-secret-name: csi-cephfs-secret
+   csi.storage.k8s.io/provisioner-secret-namespace: #@ data.values.ceph_csi_cephfs.namespace
+   csi.storage.k8s.io/controller-expand-secret-name: csi-cephfs-secret
+   csi.storage.k8s.io/controller-expand-secret-namespace: #@ data.values.ceph_csi_cephfs.namespace
+   csi.storage.k8s.io/node-stage-secret-name: csi-cephfs-secret
+   csi.storage.k8s.io/node-stage-secret-namespace: #@ data.values.ceph_csi_cephfs.namespace
+
+   # Use kernel mounter
+   mounter: kernel
+
+   # Use existing path if provided
+   #@ if hasattr(sc, "root_path"):
+   provisionVolume: "false"
+   rootPath: #@ sc.root_path
+   #@ end
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+mountOptions:
+  - debug
+#@ end
+#@ end

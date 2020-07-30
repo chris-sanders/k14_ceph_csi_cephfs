@@ -1,0 +1,5 @@
+#@data/values
+---
+ceph_csi_cephfs:
+    namespace: ceph-csi-cephfs
+    create_namespace: True

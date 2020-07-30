@@ -1,0 +1,23 @@
+#@ load("@ytt:data", "data")
+---
+name: "helm-values"
+csiConfig:
+  - clusterID: #@ data.values.ceph_csi_cephfs.cluster_id
+    monitors:
+    #@ for address in data.values.ceph_csi_cephfs.mons:
+      -  #@ address 
+    #@ end
+provisioner:
+  name: provisioner
+  replicaCount: 2
+
+#########################################################
+# Variables for 'internal' use please use with caution! #
+#########################################################
+
+## The directory where the provisioner and pluginSocketFile will be mounted
+socketDir: /var/snap/microk8s/common/var/lib/kubelet/plugins/cephfs.csi.ceph.com
+## The directory where nodeplugin socket is created
+registrationDir: /var/snap/microk8s/common/var/lib/kubelet/plugins_registry
+## The nodeplugin plugins directory
+pluginDir: /var/snap/microk8s/common/var/lib/kubelet/plugins
