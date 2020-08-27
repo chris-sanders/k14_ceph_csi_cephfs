@@ -1,4 +1,5 @@
 ---
-- name: Include k14
+- name: Cephfs
   include_role:
       name: k14
+  tags: ceph-csi-cephfs
