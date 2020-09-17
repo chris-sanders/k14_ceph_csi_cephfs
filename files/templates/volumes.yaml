@@ -1,0 +1,32 @@
+#@ if hasattr(data.values.ceph_csi_cephfs, "volumes"):
+#@ for pv in data.values.ceph_csi_cephfs.volumes:
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: #@ pv.name
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: #@ pv.capacity
+  csi:
+    driver: cephfs.csi.ceph.com
+    nodeStageSecretRef:
+      name: csi-cephfs-secret
+      namespace: #@ data.values.ceph_csi_cephfs.namespace
+    volumeAttributes:
+      clusterID: #@ data.values.ceph_csi_cephfs.cluster_id 
+      fsName: #@ pv.fsname
+      staticVolume: "true"
+      # Path of the PV on the CephFS filesystem
+      rootPath: #@ pv.root_path
+    # Can be anything, need not match PV name, or volumeName in PVC
+    # Retained as the same for simplicity and uniquness
+    volumeHandle: #@ pv.name
+  # Reclaim policy must be "retain" as,
+  # deletion of pre-provisioned volumes is not supported
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+#@ end
+#@ end

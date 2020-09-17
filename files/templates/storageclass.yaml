@@ -32,11 +32,6 @@ parameters:
    # Use kernel mounter
    mounter: kernel
 
-   # Use existing path if provided
-   #@ if hasattr(sc, "root_path"):
-   provisionVolume: "false"
-   rootPath: #@ sc.root_path
-   #@ end
 reclaimPolicy: Delete
 allowVolumeExpansion: true
 volumeBindingMode: Immediate
