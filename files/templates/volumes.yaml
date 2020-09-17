@@ -1,3 +1,4 @@
+#@ load("@ytt:data", "data")
 #@ if hasattr(data.values.ceph_csi_cephfs, "volumes"):
 #@ for pv in data.values.ceph_csi_cephfs.volumes:
 ---
